@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 	"strconv"
 )
 
@@ -15,19 +17,33 @@ func main() {
 		'R': 1,
 	}
 
-	s := "L22"
-
-	var acc int
-
-	rs := []byte(s)
-	dir := rs[0]
-	n, err := strconv.Atoi(string(rs[1:]))
+	file, err := os.Open("1-1.txt")
 
 	if err != nil {
 		panic(err)
 	}
 
-	acc = mod((acc + dir_map[dir]*n), 100)
+	scanner := bufio.NewScanner(file)
+	acc := 50
+	var hits int
 
-	fmt.Printf("%d\n", acc)
+	for scanner.Scan() {
+		s := scanner.Bytes()
+		dir := s[0]
+		n, err := strconv.Atoi(string(s[1:]))
+
+		if err != nil {
+			panic(err)
+		}
+
+		acc = mod((acc + dir_map[dir]*n), 100)
+
+		fmt.Printf("%d\n", acc)
+
+		if acc == 0 {
+			hits++
+		}
+	}
+
+	fmt.Printf("Password: %d\n", hits)
 }
