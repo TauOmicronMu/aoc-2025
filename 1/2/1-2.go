@@ -18,37 +18,8 @@ func abs(n int) int {
 	return -n
 }
 
-func calc_clicks_and_acc(line []byte, acc int) (int, int) {
-	dir_map := map[byte]int{
-		'L': -1,
-		'R': 1,
-	}
-
-	dir := line[0]
-	n, err := strconv.Atoi(string(line[1:]))
-
-	if err != nil {
-		panic(err)
-	}
-
-	prev_acc := acc
-	pre_mod_acc := acc + dir_map[dir]*n
-	acc = mod(pre_mod_acc, 100)
-
-	var sign_changed int
-	if (pre_mod_acc > 0 && prev_acc < 0) || (pre_mod_acc < 0 && prev_acc > 0) {
-		sign_changed = 1
-	}
-
-	clicks := abs(pre_mod_acc)/100 + sign_changed
-
-	fmt.Printf("prev %d, pre_mod_acc: %d, curr: %d, magnitude: %d, sign_changed: %d, clicks: %d\n", prev_acc, pre_mod_acc, acc, dir_map[dir]*n, sign_changed, clicks)
-
-	return clicks, acc
-}
-
 func main() {
-	file, err := os.Open("../1-ex.txt")
+	file, err := os.Open("../1.txt")
 
 	if err != nil {
 		panic(err)
@@ -61,10 +32,26 @@ func main() {
 	for scanner.Scan() {
 		line := scanner.Bytes()
 
-		var new_acc int
-		clicks, new_acc := calc_clicks_and_acc(line, acc)
-		acc = new_acc
+		dir_map := map[byte]int{
+			'L': -1,
+			'R': 1,
+		}
 
+		dir := dir_map[line[0]]
+		n, err := strconv.Atoi(string(line[1:]))
+
+		if err != nil {
+			panic(err)
+		}
+
+		var clicks int
+
+		for range abs(n) {
+			acc = mod(acc+dir, 100)
+			if acc == 0 {
+				clicks++
+			}
+		}
 		total_clicks += clicks
 	}
 
