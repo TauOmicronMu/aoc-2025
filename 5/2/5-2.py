@@ -1,23 +1,21 @@
 import itertools
 
 lines = []
-with open('../5-ex.txt', 'r') as f:
+with open('../5.txt', 'r') as f:
 	lines = f.readlines() 
 
 split_i = lines.index("\n")
-ranges = sorted([tuple(map(int, r.strip().split('-'))) for r in lines[:split_i]],key=lambda k: k[0])
+ranges = sorted([list(map(int, r.strip().split('-'))) for r in lines[:split_i]],key=lambda k: k[0])
 
+new_ranges = []
+new_ranges.append(ranges[0]) 
 for i in range(len(ranges)):
-	if i == len(ranges) - 1:
-		break
-
+	prev = new_ranges[-1]
 	curr = ranges[i]
-	next = ranges[i+1]
-	if curr[1] >= next[0]:
-		ranges[i+1]  = (curr[1]+1, next[1])
+	
+	if curr[0] <= prev[1]:
+		prev[1] = max(prev[1], curr[1])
+	else:	
+		new_ranges.append(curr)
 
-for range in ranges:
-	print(range)
-
-print(sum([e-s+1 for (s, e) in ranges]))
-
+print(sum(e - s + 1 for (s, e) in new_ranges))
