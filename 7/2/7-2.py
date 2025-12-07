@@ -20,11 +20,13 @@ for i in range(1, len(state)):
 			step[b+1] = hit_val if step[b+1] == '.' else step[b+1] + hit_val
 			beam_indices.remove(b)
 			beam_indices += [b-1, b+1]
+		else:
+			step[b] = step[b] + hit_val
 			
 	beam_indices = list(set(beam_indices))
 
 	for step in state:
-		print(step)
+		print([str(s) for s in step])
 	print('\n')
 
 symbs = ['.', '^']
