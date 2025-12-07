@@ -14,7 +14,7 @@ for i in range(1, len(state)):
 	for (b, symb) in hits:
 		hit_val = 1 if state[i-1][b] == 'S' else state[i-1][b]
 		if symb == '.':
-			step[b] = hit_val 
+			step[b] = hit_val if step[b] == '.' else hit_val + step[b] 
 		elif symb == '^':
 			step[b-1] = hit_val if step[b-1] == '.' else step[b-1] + hit_val
 			step[b+1] = hit_val if step[b+1] == '.' else step[b+1] + hit_val
